@@ -15,7 +15,7 @@ import java.util.List;
  * @author Adam Howard
  * @date 23/01/18
  */
-class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
+final class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
     private List<LogMessage> msgList = null;
 
     public MessageAdapter(List<LogMessage> msgList) {
