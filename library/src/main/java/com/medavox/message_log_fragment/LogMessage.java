@@ -1,4 +1,4 @@
-package com.pillconnect.bottle_api_test.message_log_fragment;
+package com.medavox.message_log_fragment;
 
 /**
  * @author Adam Howard

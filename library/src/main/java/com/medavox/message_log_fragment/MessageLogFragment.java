@@ -1,4 +1,4 @@
-package com.pillconnect.bottle_api_test.message_log_fragment;
+package com.medavox.message_log_fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -15,8 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.pillconnect.bottle_api_test.R;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
