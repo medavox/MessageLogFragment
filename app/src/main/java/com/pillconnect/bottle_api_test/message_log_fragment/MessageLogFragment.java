@@ -21,7 +21,6 @@ import com.pillconnect.bottle_api_test.R;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-
 public class MessageLogFragment extends Fragment {
     public static final String INTENT_ACTION = "message log queue has been updated";
     private static final String TAG = "MessageLogFragment";
@@ -37,6 +36,7 @@ public class MessageLogFragment extends Fragment {
         @Override public void onReceive(Context context, Intent intent) {
             //Activity ourActivity = instance.getActivity();
             Activity ourActivity = getActivity();
+            //Log.v(TAG, "received broadcast that message log is done");
 
             if (ourActivity == null) {
                 new Exception("activity was null when attempting to write a message")
@@ -45,41 +45,53 @@ public class MessageLogFragment extends Fragment {
             }//else:
             ourActivity.runOnUiThread(new Runnable() {//*/
                 @Override public void run() {
-                    int itemsInserted = 0;
-                    while(!UiLog.pendingWrites.isEmpty()) {
-                        LogMessage lm = UiLog.pendingWrites.poll();
-                        msgList.add(lm);
-                        itemsInserted++;
-                    }
-
-                    final int newMsgPosition = msgList.size() - 1;
-                    //final int newMsgPosition = 0;
-                    // Notify recycler view insert one new data.
-                    messageAdapter.notifyItemRangeInserted(newMsgPosition, itemsInserted);
-
-                    // Scroll RecyclerView to the last message.
-                    msgRecyclerView.scrollToPosition(newMsgPosition);
+                    updateUiList();
                 }
             });
         }
     };
 
+    private void updateUiList(){
+        int itemsInserted = 0;
+        while(!UiLog.pendingWrites.isEmpty()) {
+            LogMessage lm = UiLog.pendingWrites.poll();
+            msgList.add(lm);
+            itemsInserted++;
+        }
+
+        final int newMsgPosition = msgList.size() - 1;
+        //final int newMsgPosition = 0;
+        // Notify recycler view insert one new data.
+        messageAdapter.notifyItemRangeInserted(newMsgPosition, itemsInserted);
+
+        // Scroll RecyclerView to the last message.
+        msgRecyclerView.scrollToPosition(newMsgPosition);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(getContext())
+        //Log.v(TAG, "registering receiver...");
+        updateUiList();
+        LocalBroadcastManager.getInstance(getActivity())
+        //getActivity()
                 .registerReceiver(updateLogListener, new IntentFilter(INTENT_ACTION));
+        //Log.v(TAG, "local broadcast receiver is running:"+LocalBroadcastManager.getInstance(getActivity()).is)
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(getContext())
+        //Log.v(TAG, "unregistering receiver...");
+        LocalBroadcastManager.getInstance(getActivity())
+        //getActivity()
                 .unregisterReceiver(updateLogListener);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message_log, container, true);
         Log.v(TAG, "this onCreateView:"+this);
 
