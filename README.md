@@ -32,9 +32,9 @@ dependencies {
     android:layout_height="match_parent" />
 ```
 
-## 2. Initialise the Log before posting any messages.
+## 2. Initialise the UiLog before posting any messages.
 
-It's recommended that you call `UiLog.init(Context)` this at the earliest possible opportunity
+It's recommended that you call `UiLog.init(Context)`  at the earliest possible opportunity
 (eg in the onCreate() method of your main activity):
 
 ```java
